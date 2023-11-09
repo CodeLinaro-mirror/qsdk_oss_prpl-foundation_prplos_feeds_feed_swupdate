@@ -23,7 +23,7 @@ define Package/$(PKG_NAME)
   CATEGORY:=amx
   SUBMENU:=Plugins
   TITLE:=$(SHORT_DESCRIPTION)
-  URL:=git@gitlab.com:soft.at.home/bootloader/swupdate.git
+  URL:=git@gitlabinternal.softathome.com:bootloader/swupdate.git
   DEPENDS += +zlib
   DEPENDS += +libopenssl
   DEPENDS += +libconfig
