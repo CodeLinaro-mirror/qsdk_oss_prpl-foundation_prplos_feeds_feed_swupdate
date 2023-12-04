@@ -1,17 +1,15 @@
 include $(TOPDIR)/rules.mk
--include $(STAGING_DIR)/components.config
 
 PKG_NAME:=deviceinfo-swupdate
-PKG_VERSION:=v0.1.3
+PKG_VERSION:=v0.1.4
 SHORT_DESCRIPTION:=FirmwareImage upgrade for wrt
 
-PKG_SOURCE_PROTO:=git
-PKG_SOURCE_VERSION:=v0.1.3
-PKG_SOURCE_URL:=https://$(SAH_GIT_USER):$(SAH_GIT_TOKEN)@$(SAH_GIT)/$(SAH_GIT_GROUP)/deviceinfo-swupdate.git
-PKG_MIRROR_HASH:=skip
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_SOURCE:=deviceinfo-swupdate-v0.1.4.tar.gz
+PKG_SOURCE_URL:=https://gitlab.com/prpl-foundation/components/core/plugins/deviceinfo-swupdate/-/archive/v0.1.4
+PKG_HASH:=415c3411c57002ddc81423418cc3ffd4c9a4d57842b51da0eaaf1c704b4a6eea
+PKG_BUILD_DIR:=$(BUILD_DIR)/deviceinfo-swupdate-v0.1.4
 PKG_MAINTAINER:=Soft At Home <support.opensource@softathome.com>
-PKG_LICENSE:=SAH
+PKG_LICENSE:=BSD-2-Clause-Patent
 PKG_LICENSE_FILES:=LICENSE
 
 COMPONENT:=deviceinfo-swupdate
@@ -27,9 +25,10 @@ endef
 include $(INCLUDE_DIR)/package.mk
 
 define Package/$(PKG_NAME)
-  CATEGORY:=amx
+  CATEGORY:=prpl Foundation
   SUBMENU:=Plugins
   TITLE:=$(SHORT_DESCRIPTION)
+  URL:=https://gitlab.com/prpl-foundation/components/core/plugins/deviceinfo-swupdate
   DEPENDS += +libamxc
   DEPENDS += +libamxp
   DEPENDS += +libamxd
