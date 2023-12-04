@@ -2,14 +2,13 @@ include $(TOPDIR)/rules.mk
 -include $(STAGING_DIR)/components.config
 
 PKG_NAME:=swupdate
-PKG_VERSION:=gen_2023.05_v0.0.1
 SHORT_DESCRIPTION:=description
 
-PKG_SOURCE_PROTO:=git
-PKG_SOURCE_VERSION:=gen_2023.05_v0.0.1
-PKG_SOURCE_URL:=https://$(SAH_GIT_USER):$(SAH_GIT_TOKEN)@$(SAH_GIT)/$(SAH_GIT_GROUP)/swupdate
-PKG_MIRROR_HASH:=skip
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_VERSION:=gen_2023.05_v0.0.1
+PKG_SOURCE:=swupdate-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=https://gitlab.com/prpl-foundation/mirrors/swupdate/-/archive/$(PKG_VERSION)
+PKG_HASH:=8515095c723758c8fdcfbd2c355eef5ad20563193b4ba8f5033f53bb996d6780
+PKG_BUILD_DIR:=$(BUILD_DIR)/swupdate-$(PKG_VERSION)
 PKG_MAINTAINER:=Soft At Home <support.opensource@softathome.com>
 PKG_LICENSE:=GPL
 PKG_LICENSE_FILES:=COPYING
