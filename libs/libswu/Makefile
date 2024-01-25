@@ -1,13 +1,15 @@
 include $(TOPDIR)/rules.mk
+-include $(STAGING_DIR)/components.config
 
 PKG_NAME:=libswu
-PKG_VERSION:=v0.5.3
+PKG_VERSION:=v0.5.4
 SHORT_DESCRIPTION:=Library to hide board-specific aspects related to SW upgrade
 
-PKG_SOURCE:=libswu-v0.5.3.tar.gz
-PKG_SOURCE_URL:=https://gitlab.com/prpl-foundation/components/core/libraries/libswu/-/archive/v0.5.3
-PKG_HASH:=775c9849f64456466565ad80ee821c51e1b715316ac2b9f048c6a990000ee4bb
-PKG_BUILD_DIR:=$(BUILD_DIR)/libswu-v0.5.3
+PKG_SOURCE_PROTO:=git
+PKG_SOURCE_VERSION:=v0.5.4
+PKG_SOURCE_URL:=https://$(SAH_GIT_USER):$(SAH_GIT_TOKEN)@$(SAH_GIT)/$(SAH_GIT_GROUP)/libswu.git
+PKG_MIRROR_HASH:=skip
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_MAINTAINER:=Soft At Home <support.opensource@softathome.com>
 PKG_LICENSE:=BSD-2-Clause-Patent
 PKG_LICENSE_FILES:=LICENSE
@@ -18,10 +20,9 @@ PKG_RELEASE:=1
 include $(INCLUDE_DIR)/package.mk
 
 define Package/$(PKG_NAME)
-  CATEGORY:=prpl Foundation
+  CATEGORY:=SoftAtHome
   SUBMENU:=Libraries
   TITLE:=$(SHORT_DESCRIPTION)
-  URL:=https://gitlab.com/prpl-foundation/components/core/libraries/libswu
   DEPENDS += +PRPL_BUILD:libubootenv
   DEPENDS += +PRPL_BUILD:zlib
   DEPENDS += +libsahtrace
