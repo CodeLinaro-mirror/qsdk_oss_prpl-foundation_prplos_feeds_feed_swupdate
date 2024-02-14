@@ -53,8 +53,21 @@ endef
 
 LIBRARIES:=zlib openssl libconfig mtd-utils
 
-EXTRA_CFLAGS:=$(EXTRA_CFLAGS) $(CFLAGS) $(shell pkg-config --cflags $(LIBRARIES)) -Wall -W
-EXTRA_LDFLAGS:=$(EXTRA_LDFLAGS) $(LDFLAGS) $(shell pkg-config --libs $(LIBRARIES))
+# filter out ssp config to enforce strack-protector-all
+EXTRA_CFLAGS:=$(EXTRA_CFLAGS) $(filter-out -fstack-protector -fstack-protector-strong -fstack-protector-all, $(TARGET_CFLAGS)) $(shell pkg-config --cflags $(LIBRARIES)) -Wall -W
+
+# enfoce stack-protector-all if SSP not disabled in the build
+ifndef CONFIG_PKG_CC_STACKPROTECTOR_NONE
+EXTRA_CFLAGS+=-fstack-protector-all
+endif
+
+# add PIE if ASLR not disable in the configuration
+ifndef CONFIG_PKG_ASLR_PIE_NONE
+EXTRA_CFLAGS+=-specs=$(INCLUDE_DIR)/hardened-ld-pie.specs
+endif
+
+# filter out fpic and pie optoin from LDFLAGS to be compatible with wayy of work of swupdate
+EXTRA_LDFLAGS:=$(EXTRA_LDFLAGS) $(filter-out $(FPIC) -specs=$(INCLUDE_DIR)/hardened-ld-pie.specs ,$(TARGET_LDFLAGS)) $(shell pkg-config --libs $(LIBRARIES))
 CFLAGS:=
 LDFLAGS:=
 
@@ -73,7 +86,8 @@ define Build/Compile
 	$(call KCONFIG_SET_OPT,CONFIG_SW_VERSIONS_FILE,$(CONFIG_OPENSOURCE_SWUPDATE_SWVERSIONS),$(PKG_BUILD_DIR)/.config)
 	$(call KCONFIG_DISABLE_OPT,CONFIG_UBOOT,$(PKG_BUILD_DIR)/.config)
 	$(call KCONFIG_ENABLE_OPT,CONFIG_BOOTLOADER_NONE,$(PKG_BUILD_DIR)/.config)
-	$(call KCONFIG_ENABLE_OPT,CONFIG_UBIVOL,$(PKG_BUILD_DIR)/.config)
+	$(call KCONFIG_DISABLE_OPT,CONFIG_MTD,$(PKG_BUILD_DIR)/.config)
+	$(call KCONFIG_DISABLE_OPT,CONFIG_UBIVOL,$(PKG_BUILD_DIR)/.config)
 	$(call KCONFIG_DISABLE_OPT,CONFIG_UBIATTACH,$(PKG_BUILD_DIR)/.config)
 ifneq ($(CONFIG_OPENSOURCE_SURICATTA),)
 	$(call KCONFIG_ENABLE_OPT,CONFIG_SURICATTA,$(PKG_BUILD_DIR)/.config)
@@ -111,11 +125,11 @@ ifneq ($(CONFIG_OPENSOURCE_SWUPDATE_WEBSERVER),)
 	else
 		$(call KCONFIG_DISABLE_OPT,CONFIG_WEBSERVER,$(PKG_BUILD_DIR)/.config)
 endif
-	$(call Build/Compile/Default)
+	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR)/$(MAKE_PATH) $(MAKE_FLAGS) CFLAGS="$(EXTRA_CFLAGS)" LDFLAGS="$(EXTRA_LDFLAGS)" SKIP_STRIP=y  V=1
 endef
 
 define Build/Install
-	$(call Build/Install/Default,install DESTDIR=$(PKG_INSTALL_DIR))
+	$(MAKE) -C $(PKG_BUILD_DIR)/$(MAKE_PATH) $(MAKE_INSTALL_FLAGS) install DESTDIR=$(PKG_INSTALL_DIR) CFLAGS="$(EXTRA_CFLAGS)" LDFLAGS="$(EXTRA_LDFLAGS)" SKIP_STRIP=y V=1
 endef
 
 define Build/InstallDev
