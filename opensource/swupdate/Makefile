@@ -62,8 +62,15 @@ EXTRA_CFLAGS+=-fstack-protector-all
 endif
 
 # add PIE if ASLR not disable in the configuration
-ifndef CONFIG_PKG_ASLR_PIE_NONE
-EXTRA_CFLAGS+=-specs=$(INCLUDE_DIR)/hardened-ld-pie.specs
+ifdef CONFIG_PKG_ASLR_PIE_ALL
+  ifeq ($(strip $(PKG_ASLR_PIE)),1)
+    EXTRA_CFLAGS+=-specs=$(INCLUDE_DIR)/hardened-ld-pie.specs
+  endif
+endif
+ifdef CONFIG_PKG_ASLR_PIE_REGULAR
+  ifeq ($(strip $(PKG_ASLR_PIE_REGULAR)),1)
+    EXTRA_CFLAGS+=-specs=$(INCLUDE_DIR)/hardened-ld-pie.specs
+  endif
 endif
 
 # filter out fpic and pie optoin from LDFLAGS to be compatible with wayy of work of swupdate
