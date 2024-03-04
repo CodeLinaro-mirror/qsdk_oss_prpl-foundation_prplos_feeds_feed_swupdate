@@ -25,6 +25,18 @@ config OPENSOURCE_SURICATTA_HAWKBIT
     bool "enable suricatta hawkbit"
     depends on OPENSOURCE_SURICATTA
     default y
+config OPENSOURCE_SURICATTA_LUA
+    bool "enable suricatta Lua"
+    depends on OPENSOURCE_SURICATTA
+    default n
+config OPENSOURCE_EMBEDDED_SURICATTA_LUA
+    bool "Embed Suricatta Lua module in SWUpdate binary"
+    depends on OPENSOURCE_SURICATTA_LUA
+    default n
+config OPENSOURCE_EMBEDDED_SURICATTA_LUA_SOURCE
+    string "Suricatta Lua module file"
+    depends on OPENSOURCE_EMBEDDED_SURICATTA_LUA
+    default "swupdate_suricatta.lua"
 config OPENSOURCE_SWUPDATE_WEBSERVER
     bool "enable webserver support"
     default n
