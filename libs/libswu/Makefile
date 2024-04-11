@@ -2,11 +2,11 @@ include $(TOPDIR)/rules.mk
 -include $(STAGING_DIR)/components.config
 
 PKG_NAME:=libswu
-PKG_VERSION:=v0.5.5
+PKG_VERSION:=v0.5.6
 SHORT_DESCRIPTION:=Library to hide board-specific aspects related to SW upgrade
 
 PKG_SOURCE_PROTO:=git
-PKG_SOURCE_VERSION:=v0.5.5
+PKG_SOURCE_VERSION:=v0.5.6
 PKG_SOURCE_URL:=https://$(SAH_GIT_USER):$(SAH_GIT_TOKEN)@$(SAH_GIT)/$(SAH_GIT_GROUP)/libswu.git
 PKG_MIRROR_HASH:=skip
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
