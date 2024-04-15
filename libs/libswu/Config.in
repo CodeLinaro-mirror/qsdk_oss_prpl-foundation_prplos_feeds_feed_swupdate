@@ -72,6 +72,20 @@ config SAH_LIB_SWU_DUAL_BANK_BCM504
 
 endchoice
 
+choice
+    prompt "select flash layout format"
+    default SAH_LIB_SWU_FLASH_LAYOUT_SOP
+	help
+	  lib_swu must select the flash layout format used on the target platform.
+
+config SAH_LIB_SWU_FLASH_LAYOUT_SOP
+    bool "SAH SOP flash layout"
+
+config SAH_LIB_SWU_FLASH_LAYOUT_PRPL
+    bool "PRPL flash layout"
+
+endchoice
+
 endmenu
 
 endif
