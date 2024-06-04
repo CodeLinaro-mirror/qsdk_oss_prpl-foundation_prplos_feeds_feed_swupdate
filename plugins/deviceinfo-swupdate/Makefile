@@ -1,13 +1,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=deviceinfo-swupdate
-PKG_VERSION:=v0.1.4
+PKG_VERSION:=v0.1.5
 SHORT_DESCRIPTION:=FirmwareImage upgrade for wrt
 
-PKG_SOURCE:=deviceinfo-swupdate-v0.1.4.tar.gz
-PKG_SOURCE_URL:=https://gitlab.com/prpl-foundation/components/core/plugins/deviceinfo-swupdate/-/archive/v0.1.4
-PKG_HASH:=415c3411c57002ddc81423418cc3ffd4c9a4d57842b51da0eaaf1c704b4a6eea
-PKG_BUILD_DIR:=$(BUILD_DIR)/deviceinfo-swupdate-v0.1.4
+PKG_SOURCE:=deviceinfo-swupdate-v0.1.5.tar.gz
+PKG_SOURCE_URL:=https://gitlab.com/prpl-foundation/components/core/plugins/deviceinfo-swupdate/-/archive/v0.1.5
+PKG_HASH:=95dc58b42b41af81da8f0cf752589093ebab54a447e0dda9b676b0c3d5b957ce
+PKG_BUILD_DIR:=$(BUILD_DIR)/deviceinfo-swupdate-v0.1.5
 PKG_MAINTAINER:=Soft At Home <support.opensource@softathome.com>
 PKG_LICENSE:=BSD-2-Clause-Patent
 PKG_LICENSE_FILES:=LICENSE
