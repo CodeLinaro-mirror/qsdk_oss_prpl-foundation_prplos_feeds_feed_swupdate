@@ -29,9 +29,10 @@ define Package/$(PKG_NAME)
   DEPENDS += +lua
   DEPENDS += +libcurl
   DEPENDS += +libjson-c
-  DEPENDS += +libblkid
-  DEPENDS += +libext2fs
-  DEPENDS += +libuuid
+  DEPENDS += \
+             +OPENSOURCE_SWUPDATE_EXT_FILESYSTEM:libblkid \
+             +OPENSOURCE_SWUPDATE_EXT_FILESYSTEM:libext2fs \
+             +OPENSOURCE_SWUPDATE_EXT_FILESYSTEM:libuuid
   MENU:=1
 endef
 
