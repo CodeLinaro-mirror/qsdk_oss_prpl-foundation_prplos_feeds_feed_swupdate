@@ -1,13 +1,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=deviceinfo-swupdate
-PKG_VERSION:=v0.1.5
+PKG_VERSION:=v0.1.6
 SHORT_DESCRIPTION:=FirmwareImage upgrade for wrt
 
-PKG_SOURCE:=deviceinfo-swupdate-v0.1.5.tar.gz
-PKG_SOURCE_URL:=https://gitlab.com/prpl-foundation/components/core/plugins/deviceinfo-swupdate/-/archive/v0.1.5
-PKG_HASH:=95dc58b42b41af81da8f0cf752589093ebab54a447e0dda9b676b0c3d5b957ce
-PKG_BUILD_DIR:=$(BUILD_DIR)/deviceinfo-swupdate-v0.1.5
+PKG_SOURCE:=deviceinfo-swupdate-v0.1.6.tar.gz
+PKG_SOURCE_URL:=https://gitlab.com/prpl-foundation/components/core/plugins/deviceinfo-swupdate/-/archive/v0.1.6
+PKG_HASH:=f60c53c6fb421a12fb1813c90fa01ae48b1eccb48fc72b6516ff2618a6447964
+PKG_BUILD_DIR:=$(BUILD_DIR)/deviceinfo-swupdate-v0.1.6
 PKG_MAINTAINER:=Soft At Home <support.opensource@softathome.com>
 PKG_LICENSE:=BSD-2-Clause-Patent
 PKG_LICENSE_FILES:=LICENSE
@@ -37,7 +37,6 @@ define Package/$(PKG_NAME)
   DEPENDS += +libamxb
   DEPENDS += +amxrt
   DEPENDS += +libsahtrace
-  DEPENDS += +libswu
   MENU:=1
 endef
 
