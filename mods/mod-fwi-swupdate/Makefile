@@ -1,13 +1,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mod-fwi-swupdate
-PKG_VERSION:=v0.4.6
+PKG_VERSION:=v0.4.7
 SHORT_DESCRIPTION:=FirmwareImage upgrade for wrt
 
-PKG_SOURCE:=mod-fwi-swupdate-v0.4.6.tar.gz
-PKG_SOURCE_URL:=https://gitlab.com/prpl-foundation/components/core/modules/mod-fwi-swupdate/-/archive/v0.4.6
-PKG_HASH:=a59b77ee0a6c26588cbd0949f45ff78d191b1143d4550afafa096452f01b4004
-PKG_BUILD_DIR:=$(BUILD_DIR)/mod-fwi-swupdate-v0.4.6
+PKG_SOURCE:=mod-fwi-swupdate-v0.4.7.tar.gz
+PKG_SOURCE_URL:=https://gitlab.com/prpl-foundation/components/core/modules/mod-fwi-swupdate/-/archive/v0.4.7
+PKG_HASH:=686fb03891119e6f70d945dc3a4fe0e52dca8cc769e800fbe19a99ce54005416
+PKG_BUILD_DIR:=$(BUILD_DIR)/mod-fwi-swupdate-v0.4.7
 PKG_MAINTAINER:=Soft At Home <support.opensource@softathome.com>
 PKG_LICENSE:=BSD-2-Clause-Patent
 PKG_LICENSE_FILES:=LICENSE
