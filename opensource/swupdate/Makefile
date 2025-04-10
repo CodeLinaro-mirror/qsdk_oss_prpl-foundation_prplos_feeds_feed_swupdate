@@ -4,10 +4,10 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=swupdate
 SHORT_DESCRIPTION:=description
 
-PKG_VERSION:=gen_2023.05_v1.1.0
+PKG_VERSION:=gen_2023.05_v1.1.1
 PKG_SOURCE:=swupdate-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://gitlab.com/prpl-foundation/mirrors/swupdate/-/archive/$(PKG_VERSION)
-PKG_HASH:=bb48531cb454f9a209dae61306a5e1920ec85c44eb34f77738db3bf45735a055
+PKG_HASH:=skip
 PKG_BUILD_DIR:=$(BUILD_DIR)/swupdate-$(PKG_VERSION)
 PKG_MAINTAINER:=Soft At Home <support.opensource@softathome.com>
 PKG_LICENSE:=GPL
