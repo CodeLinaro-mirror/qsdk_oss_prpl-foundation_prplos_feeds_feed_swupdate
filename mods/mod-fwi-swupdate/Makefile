@@ -3,13 +3,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mod-fwi-swupdate
-PKG_VERSION:=sah-next_v0.5.3
+PKG_VERSION:=sah-next_v0.5.4
 SHORT_DESCRIPTION:=FirmwareImage upgrade for wrt
 
-PKG_SOURCE:=mod-fwi-swupdate-sah-next_v0.5.3.tar.gz
-PKG_SOURCE_URL:=https://gitlab.com/prpl-foundation/components/core/modules/mod-fwi-swupdate/-/archive/sah-next_v0.5.3
-PKG_HASH:=63f6728c4fa355fa7df7b41596f9a6872f751b27306ac1433b2a0d1318749036
-PKG_BUILD_DIR:=$(BUILD_DIR)/mod-fwi-swupdate-sah-next_v0.5.3
+PKG_SOURCE:=mod-fwi-swupdate-sah-next_v0.5.4.tar.gz
+PKG_SOURCE_URL:=https://gitlab.com/prpl-foundation/components/core/modules/mod-fwi-swupdate/-/archive/sah-next_v0.5.4
+PKG_HASH:=80d443c7fba4d0acd3cad0a54ae74d71f23ef440e762bfffa08fc629fd216c43
+PKG_BUILD_DIR:=$(BUILD_DIR)/mod-fwi-swupdate-sah-next_v0.5.4
 PKG_MAINTAINER:=Soft At Home <support.opensource@softathome.com>
 PKG_LICENSE:=BSD-2-Clause-Patent
 PKG_LICENSE_FILES:=LICENSE
