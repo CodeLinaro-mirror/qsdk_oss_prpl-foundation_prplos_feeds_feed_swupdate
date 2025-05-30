@@ -106,3 +106,20 @@ config OPENSOURCE_SWUPDATE_FAT_FILESYSTEM
     help
       Enable support for creating FAT file systems
     default n
+config OPENSOURCE_SWUPDATE_UBIATTACH
+    bool "Enable scanning of mtds with UBI volumes that are not yet attached"
+    help
+        Enable scanning of mtds with UBI volumes that are not yet attached
+    default n
+config OPENSOURCE_SWUPDATE_UBIATTACH_BLACKLIST
+    string "MTDs that are excluded from scanning for UBI volumes"
+    depends on OPENSOURCE_SWUPDATE_UBIATTACH
+    help
+        MTDs that are excluded from scanning for UBI volumes
+    default ""
+config OPENSOURCE_SWUPDATE_UBIATTACH_WHITELIST
+    string "MTDs that must be scanned for UBI volumes"
+    depends on OPENSOURCE_SWUPDATE_UBIATTACH
+    help
+        MTDs that must be scanned for UBI volumes
+    default ""
