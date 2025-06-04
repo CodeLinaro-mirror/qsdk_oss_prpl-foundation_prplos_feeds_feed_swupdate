@@ -1,13 +1,15 @@
+# WARNING: Automatically generated file using BAF (Build system Agnostic File) tooling
+# WARNING: You should contribute changes to https://gitlab.com/prpl-foundation/components/core/plugins/deviceinfo-swupdate/-/blob/main/baf.yml instead
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=deviceinfo-swupdate
-PKG_VERSION:=v0.1.7
+PKG_VERSION:=sah-next_v0.2.0
 SHORT_DESCRIPTION:=FirmwareImage upgrade for wrt
 
-PKG_SOURCE:=deviceinfo-swupdate-v0.1.7.tar.gz
-PKG_SOURCE_URL:=https://gitlab.com/prpl-foundation/components/core/plugins/deviceinfo-swupdate/-/archive/v0.1.7
-PKG_HASH:=ba3e0c6527102f4bf372cc3d0701571492d8651d980b14aac293c46613fea5da
-PKG_BUILD_DIR:=$(BUILD_DIR)/deviceinfo-swupdate-v0.1.7
+PKG_SOURCE:=deviceinfo-swupdate-sah-next_v0.2.0.tar.gz
+PKG_SOURCE_URL:=https://gitlab.com/prpl-foundation/components/core/plugins/deviceinfo-swupdate/-/archive/sah-next_v0.2.0
+PKG_HASH:=42a686acbbbe7dea681c89ec215badb83aa971b5020f663950d70fd90c738532
+PKG_BUILD_DIR:=$(BUILD_DIR)/deviceinfo-swupdate-sah-next_v0.2.0
 PKG_MAINTAINER:=Soft At Home <support.opensource@softathome.com>
 PKG_LICENSE:=BSD-2-Clause-Patent
 PKG_LICENSE_FILES:=LICENSE
@@ -26,7 +28,7 @@ include $(INCLUDE_DIR)/package.mk
 
 define Package/$(PKG_NAME)
   CATEGORY:=prpl Foundation
-  SUBMENU:=Plugins
+  SUBMENU:=Ambiorix
   TITLE:=$(SHORT_DESCRIPTION)
   URL:=https://gitlab.com/prpl-foundation/components/core/plugins/deviceinfo-swupdate
   DEPENDS += +libamxc
