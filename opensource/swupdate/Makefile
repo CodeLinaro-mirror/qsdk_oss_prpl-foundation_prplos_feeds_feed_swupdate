@@ -4,7 +4,7 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=swupdate
 SHORT_DESCRIPTION:=description
 
-PKG_VERSION:=gen_2024.12.1_v1.0.1
+PKG_VERSION:=gen_2023.05_v1.1.1
 PKG_SOURCE:=swupdate-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://gitlab.com/prpl-foundation/mirrors/swupdate/-/archive/$(PKG_VERSION)
 PKG_HASH:=7a3ec7c83f735a7a740aac1c706a5f78aa0caea18051d49751a56d1c774ce30c
@@ -26,10 +26,9 @@ define Package/$(PKG_NAME)
   DEPENDS += +zlib
   DEPENDS += +libopenssl
   DEPENDS += +libconfig
-  DEPENDS += +lua5.3
+  DEPENDS += +lua
   DEPENDS += +libcurl
   DEPENDS += +libjson-c
-  DEPENDS += +libubootenv
   DEPENDS += \
              +OPENSOURCE_SWUPDATE_EXT_FILESYSTEM:libblkid \
              +OPENSOURCE_SWUPDATE_EXT_FILESYSTEM:libext2fs \
@@ -56,10 +55,7 @@ define KCONFIG_DISABLE_OPT # (option, file)
 	echo "# $(1) is not set" >> $(2)
 endef
 
-LIBRARIES:=zlib openssl libconfig mtd-utils libubootenv
-
-TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include/lua5.3
-TARGET_LDFLAGS += -L$(STAGING_DIR)/usr/lib -llua5.3
+LIBRARIES:=zlib openssl libconfig mtd-utils
 
 # filter out ssp config to enforce strack-protector-all
 EXTRA_CFLAGS:=$(EXTRA_CFLAGS) $(filter-out -fstack-protector -fstack-protector-strong -fstack-protector-all, $(TARGET_CFLAGS)) $(shell pkg-config --cflags $(LIBRARIES)) -Wall -W
