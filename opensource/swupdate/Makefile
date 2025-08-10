@@ -23,12 +23,14 @@ define Package/$(PKG_NAME)
   SUBMENU:=Plugins
   TITLE:=$(SHORT_DESCRIPTION)
   URL:=git@gitlabinternal.softathome.com:bootloader/swupdate.git
+  # Fix: Add missing runtime dependencies
   DEPENDS += +zlib
   DEPENDS += +libopenssl
   DEPENDS += +libconfig
   DEPENDS += +lua
   DEPENDS += +libcurl
   DEPENDS += +libjson-c
+  DEPENDS += +mtd-utils
   DEPENDS += \
              +OPENSOURCE_SWUPDATE_EXT_FILESYSTEM:libblkid \
              +OPENSOURCE_SWUPDATE_EXT_FILESYSTEM:libext2fs \
@@ -55,7 +57,8 @@ define KCONFIG_DISABLE_OPT # (option, file)
 	echo "# $(1) is not set" >> $(2)
 endef
 
-LIBRARIES:=zlib openssl libconfig mtd-utils
+# Fix: Update libraries list to include proper library names
+LIBRARIES:=zlib openssl libconfig
 
 # filter out ssp config to enforce strack-protector-all
 EXTRA_CFLAGS:=$(EXTRA_CFLAGS) $(filter-out -fstack-protector -fstack-protector-strong -fstack-protector-all, $(TARGET_CFLAGS)) $(shell pkg-config --cflags $(LIBRARIES)) -Wall -W
@@ -77,8 +80,16 @@ ifdef CONFIG_PKG_ASLR_PIE_REGULAR
   endif
 endif
 
+# Fix: Add proper library paths and libraries for MTD and U-Boot
+MTD_BUILD_DIR:=$(shell find $(BUILD_DIR) -maxdepth 1 -name "mtd-utils-*" -type d | head -1)
+
 # filter out fpic and pie optoin from LDFLAGS to be compatible with wayy of work of swupdate
 EXTRA_LDFLAGS:=$(EXTRA_LDFLAGS) $(filter-out $(FPIC) -specs=$(INCLUDE_DIR)/hardened-ld-pie.specs ,$(TARGET_LDFLAGS)) $(shell pkg-config --libs $(LIBRARIES))
+
+# Fix: Add MTD paths and libraries
+EXTRA_LDFLAGS += -L$(MTD_BUILD_DIR) -lmtd -lubi
+EXTRA_LDFLAGS += -L$(STAGING_DIR)/usr/lib
+
 CFLAGS:=
 LDFLAGS:=
 
@@ -89,10 +100,23 @@ for file in `cat $(OUTPUT_FILES_LIST)` ; do \
 done
 endef
 
+define Build/Prepare
+	$(call Build/Prepare/Default)
+	# Version-independent MTD library discovery
+	mkdir -p $(PKG_BUILD_DIR)/lib
+	MTD_DIR=$$(find $(BUILD_DIR) -maxdepth 1 -name "mtd-utils-*" -type d | head -1); \
+	if [ -n "$$MTD_DIR" ] && [ -f "$$MTD_DIR/libmtd.a" ]; then \
+		cp "$$MTD_DIR/libmtd.a" $(PKG_BUILD_DIR)/lib/; \
+	fi; \
+	if [ -n "$$MTD_DIR" ] && [ -f "$$MTD_DIR/libubi.a" ]; then \
+		cp "$$MTD_DIR/libubi.a" $(PKG_BUILD_DIR)/lib/; \
+	fi
+endef
+
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) softathome_defconfig
 	$(call KCONFIG_SET_OPT,CONFIG_EXTRA_CFLAGS,"$(EXTRA_CFLAGS)",$(PKG_BUILD_DIR)/.config)
-	$(call KCONFIG_SET_OPT,CONFIG_EXTRA_LDFLAGS,"$(EXTRA_LDFLAGS)",$(PKG_BUILD_DIR)/.config)
+	$(call KCONFIG_SET_OPT,CONFIG_EXTRA_LDFLAGS,"$(EXTRA_LDFLAGS) -L$(PKG_BUILD_DIR)/lib",$(PKG_BUILD_DIR)/.config)
 	$(call KCONFIG_SET_OPT,CONFIG_HW_COMPATIBILITY_FILE,$(CONFIG_OPENSOURCE_SWUPDATE_HWREVISION),$(PKG_BUILD_DIR)/.config)
 	$(call KCONFIG_SET_OPT,CONFIG_SW_VERSIONS_FILE,$(CONFIG_OPENSOURCE_SWUPDATE_SWVERSIONS),$(PKG_BUILD_DIR)/.config)
 ifneq ($(CONFIG_OPENSOURCE_SWUPDATE_UBOOT),)
@@ -168,7 +192,7 @@ ifneq ($(CONFIG_OPENSOURCE_SWUPDATE_WEBSERVER),)
 	else
 		$(call KCONFIG_DISABLE_OPT,CONFIG_WEBSERVER,$(PKG_BUILD_DIR)/.config)
 endif
-	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR)/$(MAKE_PATH) $(MAKE_FLAGS) CFLAGS="$(EXTRA_CFLAGS)" LDFLAGS="$(EXTRA_LDFLAGS)" SKIP_STRIP=y  V=1
+	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR)/$(MAKE_PATH) $(MAKE_FLAGS) CFLAGS="$(EXTRA_CFLAGS)" LDFLAGS="$(EXTRA_LDFLAGS) -L$(PKG_BUILD_DIR)/lib" SKIP_STRIP=y  V=1
 endef
 
 define Build/Install
