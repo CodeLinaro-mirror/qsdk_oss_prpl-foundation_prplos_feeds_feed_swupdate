@@ -4,10 +4,10 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=swupdate
 SHORT_DESCRIPTION:=description
 
-PKG_VERSION:=gen_2023.05_v1.1.0
+PKG_VERSION:=gen_2025.05_v1.0.0
 PKG_SOURCE:=swupdate-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://gitlab.com/prpl-foundation/mirrors/swupdate/-/archive/$(PKG_VERSION)
-PKG_HASH:=bb48531cb454f9a209dae61306a5e1920ec85c44eb34f77738db3bf45735a055
+PKG_HASH:=8465033959cbdc37fc08e34689baf7e5403bdf439c69e98e4d80a5e15990554d
 PKG_BUILD_DIR:=$(BUILD_DIR)/swupdate-$(PKG_VERSION)
 PKG_MAINTAINER:=Soft At Home <support.opensource@softathome.com>
 PKG_LICENSE:=GPL
@@ -27,10 +27,11 @@ define Package/$(PKG_NAME)
   DEPENDS += +zlib
   DEPENDS += +libopenssl
   DEPENDS += +libconfig
-  DEPENDS += +lua
+  DEPENDS += +lua5.3
   DEPENDS += +libcurl
   DEPENDS += +libjson-c
   DEPENDS += +mtd-utils
+  DEPENDS += +libubootenv
   DEPENDS += \
              +OPENSOURCE_SWUPDATE_EXT_FILESYSTEM:libblkid \
              +OPENSOURCE_SWUPDATE_EXT_FILESYSTEM:libext2fs \
@@ -58,7 +59,9 @@ define KCONFIG_DISABLE_OPT # (option, file)
 endef
 
 # Fix: Update libraries list to include proper library names
-LIBRARIES:=zlib openssl libconfig
+LIBRARIES:=zlib openssl libconfig libubootenv
+TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include/lua5.3
+TARGET_LDFLAGS += -L$(STAGING_DIR)/usr/lib -llua5.3
 
 # filter out ssp config to enforce strack-protector-all
 EXTRA_CFLAGS:=$(EXTRA_CFLAGS) $(filter-out -fstack-protector -fstack-protector-strong -fstack-protector-all, $(TARGET_CFLAGS)) $(shell pkg-config --cflags $(LIBRARIES)) -Wall -W
@@ -192,11 +195,11 @@ ifneq ($(CONFIG_OPENSOURCE_SWUPDATE_WEBSERVER),)
 	else
 		$(call KCONFIG_DISABLE_OPT,CONFIG_WEBSERVER,$(PKG_BUILD_DIR)/.config)
 endif
-	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR)/$(MAKE_PATH) $(MAKE_FLAGS) CFLAGS="$(EXTRA_CFLAGS)" LDFLAGS="$(EXTRA_LDFLAGS) -L$(PKG_BUILD_DIR)/lib" SKIP_STRIP=y  V=1
+	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR)/$(MAKE_PATH) $(MAKE_FLAGS) CFLAGS="$(EXTRA_CFLAGS)" LDFLAGS="$(EXTRA_LDFLAGS) -L$(PKG_BUILD_DIR)/lib" LUABUILD_VERSION=5.3 SKIP_STRIP=y  V=1
 endef
 
 define Build/Install
-	$(MAKE) -C $(PKG_BUILD_DIR)/$(MAKE_PATH) $(MAKE_INSTALL_FLAGS) install DESTDIR=$(PKG_INSTALL_DIR) CFLAGS="$(EXTRA_CFLAGS)" LDFLAGS="$(EXTRA_LDFLAGS)" SKIP_STRIP=y V=1
+	$(MAKE) -C $(PKG_BUILD_DIR)/$(MAKE_PATH) $(MAKE_INSTALL_FLAGS) install DESTDIR=$(PKG_INSTALL_DIR) CFLAGS="$(EXTRA_CFLAGS)" LDFLAGS="$(EXTRA_LDFLAGS)" LUABUILD_VERSION=5.3 SKIP_STRIP=y V=1
 endef
 
 define Build/InstallDev
