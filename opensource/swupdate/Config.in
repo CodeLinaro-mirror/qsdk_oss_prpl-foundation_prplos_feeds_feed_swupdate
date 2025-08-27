@@ -3,6 +3,9 @@ config OPENSOURCE_SWUPDATE
     default y
     select SAH_SERVICES_MTD_UTILS
     select SAH_SERVICES_MTD_UTILS_DEVEL
+config CONFIG_SWUPDATE_MTD
+    bool "build OPENSOURCE_SWUPDATE component"
+    default n
 config OPENSOURCE_SWUPDATE_HWREVISION
     string "swupdate hwrevision file"
     depends on OPENSOURCE_SWUPDATE

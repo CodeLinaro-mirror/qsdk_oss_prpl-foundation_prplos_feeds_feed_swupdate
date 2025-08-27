@@ -14,7 +14,11 @@ PKG_LICENSE:=GPL
 PKG_LICENSE_FILES:=COPYING
 
 PKG_RELEASE:=1
+ifneq ($(CONFIG_SWUPDATE_MTD),)
+PKG_BUILD_DEPENDS += fstools
 PKG_BUILD_DEPENDS += mtd-utils
+endif
+PKG_BUILD_DEPENDS += libubootenv
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -30,7 +34,11 @@ define Package/$(PKG_NAME)
   DEPENDS += +lua5.3
   DEPENDS += +libcurl
   DEPENDS += +libjson-c
+ifneq ($(CONFIG_SWUPDATE_MTD),)
+  DEPENDS += +fstools
+  DEPENDS += +nand-utils
   DEPENDS += +mtd-utils
+endif
   DEPENDS += +libubootenv
   DEPENDS += \
              +OPENSOURCE_SWUPDATE_EXT_FILESYSTEM:libblkid \
@@ -82,16 +90,24 @@ ifdef CONFIG_PKG_ASLR_PIE_REGULAR
     EXTRA_CFLAGS+=-specs=$(INCLUDE_DIR)/hardened-ld-pie.specs
   endif
 endif
-
+ifneq ($(CONFIG_SWUPDATE_MTD),)
 # Fix: Add proper library paths and libraries for MTD and U-Boot
 MTD_BUILD_DIR:=$(shell find $(BUILD_DIR) -maxdepth 1 -name "mtd-utils-*" -type d | head -1)
+endif
 
 # filter out fpic and pie optoin from LDFLAGS to be compatible with wayy of work of swupdate
 EXTRA_LDFLAGS:=$(EXTRA_LDFLAGS) $(filter-out $(FPIC) -specs=$(INCLUDE_DIR)/hardened-ld-pie.specs ,$(TARGET_LDFLAGS)) $(shell pkg-config --libs $(LIBRARIES))
 
 # Fix: Add MTD paths and libraries
+ifneq ($(CONFIG_SWUPDATE_MTD),)
 EXTRA_LDFLAGS += -L$(MTD_BUILD_DIR) -lmtd -lubi
 EXTRA_LDFLAGS += -L$(STAGING_DIR)/usr/lib
+endif
+
+ifneq ($(MTD_BUILD_DIR),)
+EXTRA_CFLAGS += -I$(MTD_BUILD_DIR)/include
+endif
+EXTRA_CFLAGS += -I$(STAGING_DIR)/usr/include
 
 CFLAGS:=
 LDFLAGS:=
@@ -105,6 +121,7 @@ endef
 
 define Build/Prepare
 	$(call Build/Prepare/Default)
+ifneq ($(CONFIG_SWUPDATE_MTD),)
 	# Version-independent MTD library discovery
 	mkdir -p $(PKG_BUILD_DIR)/lib
 	MTD_DIR=$$(find $(BUILD_DIR) -maxdepth 1 -name "mtd-utils-*" -type d | head -1); \
@@ -114,10 +131,19 @@ define Build/Prepare
 	if [ -n "$$MTD_DIR" ] && [ -f "$$MTD_DIR/libubi.a" ]; then \
 		cp "$$MTD_DIR/libubi.a" $(PKG_BUILD_DIR)/lib/; \
 	fi
+endif
 endef
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) softathome_defconfig
+ifeq ($(CONFIG_SWUPDATE_MTD),)
+	# Disable UBI
+	$(call KCONFIG_DISABLE_OPT,CONFIG_UBIVOL,$(PKG_BUILD_DIR)/.config)
+	$(call KCONFIG_DISABLE_OPT,CONFIG_UBIATTACH,$(PKG_BUILD_DIR)/.config)
+
+	# Disable MTD/NAND
+	$(call KCONFIG_DISABLE_OPT,CONFIG_MTD,$(PKG_BUILD_DIR)/.config)
+endif	
 	$(call KCONFIG_SET_OPT,CONFIG_EXTRA_CFLAGS,"$(EXTRA_CFLAGS)",$(PKG_BUILD_DIR)/.config)
 	$(call KCONFIG_SET_OPT,CONFIG_EXTRA_LDFLAGS,"$(EXTRA_LDFLAGS) -L$(PKG_BUILD_DIR)/lib",$(PKG_BUILD_DIR)/.config)
 	$(call KCONFIG_SET_OPT,CONFIG_HW_COMPATIBILITY_FILE,$(CONFIG_OPENSOURCE_SWUPDATE_HWREVISION),$(PKG_BUILD_DIR)/.config)
