@@ -14,7 +14,8 @@ PKG_LICENSE:=GPL
 PKG_LICENSE_FILES:=COPYING
 
 PKG_RELEASE:=1
-PKG_BUILD_DEPENDS += mtd-utils
+PKG_BUILD_DEPENDS += +mtd-utils
+PKG_BUILD_DEPENDS += +libubootenv
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -92,6 +93,11 @@ EXTRA_LDFLAGS:=$(EXTRA_LDFLAGS) $(filter-out $(FPIC) -specs=$(INCLUDE_DIR)/harde
 # Fix: Add MTD paths and libraries
 EXTRA_LDFLAGS += -L$(MTD_BUILD_DIR) -lmtd -lubi
 EXTRA_LDFLAGS += -L$(STAGING_DIR)/usr/lib
+
+ifneq ($(MTD_BUILD_DIR),)
+EXTRA_CFLAGS += -I$(MTD_BUILD_DIR)/include
+endif
+EXTRA_CFLAGS += -I$(STAGING_DIR)/usr/include
 
 CFLAGS:=
 LDFLAGS:=
