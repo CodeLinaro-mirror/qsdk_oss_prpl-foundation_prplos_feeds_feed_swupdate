@@ -43,7 +43,9 @@ endif
   DEPENDS += \
              +OPENSOURCE_SWUPDATE_EXT_FILESYSTEM:libblkid \
              +OPENSOURCE_SWUPDATE_EXT_FILESYSTEM:libext2fs \
-             +OPENSOURCE_SWUPDATE_EXT_FILESYSTEM:libuuid
+             +OPENSOURCE_SWUPDATE_EXT_FILESYSTEM:libuuid \
+             +OPENSOURCE_SWUPDATE_EXT_FILESYSTEM:libcomerr \
+             +OPENSOURCE_SWUPDATE_DISKPART_HANDLER:libfdisk
   MENU:=1
 endef
 
@@ -70,6 +72,9 @@ endef
 LIBRARIES:=zlib openssl libconfig libubootenv
 TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include/lua5.3
 TARGET_LDFLAGS += -L$(STAGING_DIR)/usr/lib -llua5.3
+ifneq ($(CONFIG_OPENSOURCE_SWUPDATE_EXT_FILESYSTEM),)
+TARGET_LDFLAGS += -lcom_err
+endif
 
 # filter out ssp config to enforce strack-protector-all
 EXTRA_CFLAGS:=$(EXTRA_CFLAGS) $(filter-out -fstack-protector -fstack-protector-strong -fstack-protector-all, $(TARGET_CFLAGS)) $(shell pkg-config --cflags $(LIBRARIES)) -Wall -W
@@ -136,6 +141,11 @@ endef
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) softathome_defconfig
+	$(call KCONFIG_SET_OPT,CONFIG_LUAPKG,"lua5.3",$(PKG_BUILD_DIR)/.config)
+ifneq ($(CONFIG_OPENSOURCE_SWUPDATE_DISKPART_HANDLER),)
+	$(call KCONFIG_ENABLE_OPT,CONFIG_DISKPART,$(PKG_BUILD_DIR)/.config)
+	$(call KCONFIG_ENABLE_OPT,CONFIG_DISKPART_FORMAT,$(PKG_BUILD_DIR)/.config)
+endif
 ifeq ($(CONFIG_SWUPDATE_MTD),)
 	# Disable UBI
 	$(call KCONFIG_DISABLE_OPT,CONFIG_UBIVOL,$(PKG_BUILD_DIR)/.config)
