@@ -22,6 +22,7 @@ config SAH_LIB_SWU_UBI
 
 config SAH_LIB_SWU_VFLASH
     bool "vflash (BCM flash abstraction layer)"
+    depends on SAH_KERNEL_BROADCOM_4_19
 
 config SAH_LIB_SWU_GPT
     bool "GPT"
@@ -33,6 +34,7 @@ config SAH_LIB_SWU_UBI_DEVICE_NUMBER
     default 0
 	help
 	  UBI device with UBI volumes to upgrade.
+    depends on SAH_LIB_SWU_UBI
 
 config SAH_LIB_SWU_TOOLS
     bool "Build the debug tool libswu-tool"
@@ -66,9 +68,11 @@ choice
 
 config SAH_LIB_SWU_DUAL_BANK_SBL
     bool "SoftAtHome SBL"
+    depends on OPENSOURCE_LIBUBOOTENV
 
 config SAH_LIB_SWU_DUAL_BANK_BCM504
     bool "Broadcom BSP 5.04+"
+    depends on SAH_KERNEL_BROADCOM_4_19
 
 endchoice
 
@@ -77,6 +81,7 @@ choice
     default SAH_LIB_SWU_FLASH_LAYOUT_SOP
 	help
 	  lib_swu must select the flash layout format used on the target platform.
+    depends on SAH_LIB_SWU_DUAL_BANK_SBL
 
 config SAH_LIB_SWU_FLASH_LAYOUT_SOP
     bool "SAH SOP flash layout"
