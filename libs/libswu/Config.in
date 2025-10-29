@@ -68,7 +68,7 @@ choice
 
 config SAH_LIB_SWU_DUAL_BANK_SBL
     bool "SoftAtHome SBL"
-    depends on OPENSOURCE_LIBUBOOTENV
+    depends on (PACKAGE_libubootenv || OPENSOURCE_LIBUBOOTENV)
 
 config SAH_LIB_SWU_DUAL_BANK_BCM504
     bool "Broadcom BSP 5.04+"
