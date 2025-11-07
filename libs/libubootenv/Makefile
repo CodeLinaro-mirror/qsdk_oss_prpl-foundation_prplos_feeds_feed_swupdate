@@ -16,7 +16,7 @@ PKG_SOURCE_URL:=https://github.com/sbabic/libubootenv
 PKG_HASH:=5507339628b5caf244e1ff9d58cb3fa534b16beb
 
 PKG_MAINTAINER:=Mohamed-nour TOUMI <mohamed.toumi_ext@softathome.com>
-PKG_LICENSE:=LGPL-2.1-or-later
+PKG_LICENSE:=BSD 2-Clause Plus Patent License
 PKG_LICENSE_FILES:=COPYING
 
 PKG_INSTALL:=1
