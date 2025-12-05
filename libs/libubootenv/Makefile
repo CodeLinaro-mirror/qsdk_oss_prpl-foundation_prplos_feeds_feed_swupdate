@@ -13,6 +13,7 @@ PKG_RELEASE:=1
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_VERSION:=v0.3.6
 PKG_SOURCE_URL:=https://github.com/sbabic/libubootenv
+PKG_MIRROR_HASH:=8c6ccb3ee7656c548a93346c8792ce9c0aea7f77003b1dd3af652a6357b180cc
 PKG_HASH:=5507339628b5caf244e1ff9d58cb3fa534b16beb
 
 PKG_MAINTAINER:=Mohamed-nour TOUMI <mohamed.toumi_ext@softathome.com>
