@@ -19,7 +19,6 @@ PKG_BUILD_DEPENDS += fstools
 PKG_BUILD_DEPENDS += mtd-utils
 endif
 PKG_BUILD_DEPENDS += libubootenv
-PKG_BUILD_DEPENDS += imagegenerator/host
 
 include $(INCLUDE_DIR)/package.mk
 
