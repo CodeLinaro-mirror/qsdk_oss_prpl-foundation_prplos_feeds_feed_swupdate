@@ -20,6 +20,10 @@ config OPENSOURCE_SWUPDATE_SIGNED
 config OPENSOURCE_SWUPDATE_HANDLER_UBI
     bool "enable UBI volumes update support"
     default n
+config OPENSOURCE_SWUPDATE_DISKPART
+    bool "enable diskpart update support"
+    depends on OPENSOURCE_SWUPDATE
+    default n
 config OPENSOURCE_SURICATTA
     bool "enable suricatta"
     default y
