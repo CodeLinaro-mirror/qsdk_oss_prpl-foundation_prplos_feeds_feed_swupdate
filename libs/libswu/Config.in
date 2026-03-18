@@ -1,3 +1,5 @@
+# WARNING: Automatically generated file using BAF (Build system Agnostic File) tooling (version 2.40.3)
+# WARNING: You should contribute changes to /-/blob/main/baf.yml instead
 config PACKAGE_libswu
     tristate
     select SAH_LIB_SWU
@@ -22,7 +24,7 @@ config SAH_LIB_SWU_UBI
 
 config SAH_LIB_SWU_VFLASH
     bool "vflash (BCM flash abstraction layer)"
-    depends on SAH_KERNEL_BROADCOM_4_19
+    depends on (SAH_KERNEL_BROADCOM_4_19 || TARGET_brcmbca)
 
 config SAH_LIB_SWU_GPT
     bool "GPT"
