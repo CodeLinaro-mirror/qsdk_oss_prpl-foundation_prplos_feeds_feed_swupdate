@@ -5,7 +5,7 @@ PKG_VERSION:=dev_PCF-2624
 SHORT_DESCRIPTION:=FirmwareImage upgrade for wrt
 
 PKG_SOURCE_PROTO:=git
-PKG_SOURCE_VERSION:=dev_PCF-2624
+PKG_SOURCE_VERSION:=15c9fbcc3bcfbedb697119564236d521e98b9277
 PKG_SOURCE_URL:=https://gitlab.com/prpl-foundation/components/core/modules/mod-fwi-swupdate.git
 PKG_MIRROR_HASH:=skip
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
